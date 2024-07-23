@@ -131,11 +131,11 @@ function namesMatcher(listNames) {
     )
     .bind("typeahead:selected", function (_obj, _datum, _name) {
       $("#employeeList").blur(); // make lost focus
-      //setImage(datum);
     })
 
     .bind("typeahead:change", function (_obj, datum, _name) {
       setImage(datum);
+      $("#datepicker").datepicker("setDate", "0d"); // today
     });
 }
 
