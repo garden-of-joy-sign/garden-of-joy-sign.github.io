@@ -25,6 +25,8 @@ const imageUrl = "https://drive.google.com/thumbnail?id=#&sz=w256";
 const canvas = $("#signatureCanvas").get(0);
 const ctx = canvas.getContext("2d");
 
+let currentEmployee = ""; // save current employee on select
+
 window.addEventListener("resize", () => adjustCanvas(canvas));
 adjustCanvas(canvas); // for define size onOpen
 
@@ -130,11 +132,12 @@ function namesMatcher(listNames) {
       }
     )
     .bind("typeahead:selected", function (_obj, _datum, _name) {
-      $("#employeeList").blur(); // make lost focus
+      $("#employeeList").blur(); // force lost focus
     })
 
     .bind("typeahead:change", function (_obj, datum, _name) {
-      setImage(datum);
+      currentEmployee = datum; // save current name
+      setImage();
       $("#datepicker").datepicker("setDate", "0d"); // today
     });
 }
@@ -144,11 +147,11 @@ function namesMatcher(listNames) {
  * Image - from url
  * @param {String} name - name of user (Ivan Rabinovich)
  */
-function setImage(name) {
-  if (!name) {
+function setImage() {
+  if (!currentEmployee) {
     clearImage();
   } else {
-    const ni = nameImages.find((x) => x.name == name);
+    const ni = nameImages.find((x) => x.name == currentEmployee);
     if (!ni) {
       //names not exist
       setNewNameImage();
@@ -182,7 +185,7 @@ $(function () {
  * @returns
  */
 async function saveSignature(shift) {
-  const employee = $("#employeeList").val();
+  const employee = currentEmployee; //not select once again - use saved name
 
   if (employee.trim() == "") {
     await msgWarning("Please, enter client's name!");
