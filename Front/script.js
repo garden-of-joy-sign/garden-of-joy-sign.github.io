@@ -139,6 +139,7 @@ function namesMatcher(listNames) {
       currentEmployee = datum; // save current name
       setImage();
       $("#datepicker").datepicker("setDate", "0d"); // today
+      clearCanvas(canvas, ctx);
     });
 }
 
@@ -240,9 +241,12 @@ async function saveSignature(shift) {
   if (data.status === "success") {
     await msgOk("Signature is done successfully");
 
+    // clear control
     clearEmployer();
     clearCanvas(canvas, ctx);
     clearImage();
+
+    currentEmployee = "";
 
     ////console.log(data);
   } else {
